@@ -25,21 +25,21 @@ const Gallery: React.FC<GalleryProps> = ({ images, interval = 3000 }) => {
   }, [images.length, interval]);
 
   return (
-    <div className="flex justify-center bg-[#F5F5F5] h-[875px] ">
+    <div className="flex justify-center h-[775px] bg-[#F5F5F5] overflow-x-hidden">
         <div className="max-w-7xl h-full mx-auto px-4 pt-40 flex flex-col md:flex-row gap-8 relative">
             <div className="max-w-[510px]">
-                <span className="text-[#F6AA1C] font-bold text-base leading-6 tracking-[0.75px]">
+                <span className="text-[#F6AA1C] font-bold text-base leading-6 tracking-[0.75px] block mb-5">
                 Melhores ofertas personalizadas
                 </span>
-                <h1 className="text-[#1F1F1F] font-extrabold text-[64px] leading-[66px] tracking-[1px]">
+                <h1 className="text-[#1F1F1F] font-extrabold text-[64px] leading-[66px] tracking-[1px] mb-6">
                 Queima de stoque Nike 🔥
                 </h1>
-                <p className="text-[#474747] font-normal text-[18px] leading-[34px] tracking-[0.75px]">
+                <p className="text-[#474747] font-normal text-[18px] leading-[34px] tracking-[0.75px] mb-10">
                 Consequat culpa exercitation mollit nisi excepteur do do tempor laboris eiusmod irure consectetur.
                 </p>
                 <Button
                 label="Ver Ofertas"
-                className="w-28 h-10 bg-[#C92071] text-[#F5F5F5] text-sm leading-5 font-bold rounded-lg p-button-sm cursor-pointer"
+                className="w-56 h-12 bg-[#C92071] text-[#F5F5F5] font-bold text-[16px] leading-[24px] tracking-[0.75px] rounded-lg cursor-pointer"
                 />
             </div>
             <div>
@@ -60,7 +60,7 @@ const Gallery: React.FC<GalleryProps> = ({ images, interval = 3000 }) => {
                 </div>
             </div>
     
-            <div className="absolute top-8 -right-30">
+            <div className="absolute top-8 -right-60">
                 <Ornament />
             </div>
     

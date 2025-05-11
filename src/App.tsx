@@ -1,22 +1,15 @@
-import Gallery from "./components/Gallery"
-import Header from "./components/Header"
-import Section from "./components/Section"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './pages/layout';
+import HomePage from './pages/HomePage';
 
-const images = [
-  { src: '../../public/home-slide-1.jpeg' },
-  { src: '../../public/home-slide-2.jpeg' },
-  { src: '../../public/home-slide-3.jpeg' },
-  { src: '../../public/home-slide-4.jpeg' }
-]
 
 function App() {
   return (
-    <div>
-        <Header/>
-        <Section>
-          <Gallery images={images} interval={5000}/>
-        </Section>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout><HomePage /></Layout>} />
+      </Routes>
+    </Router>
   )
 }
 

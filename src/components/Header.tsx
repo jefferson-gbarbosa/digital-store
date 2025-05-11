@@ -4,9 +4,9 @@ import { Badge } from "primereact/badge";
 import Logo from "./Logo";
 import cartIcon from "../assets/mini-cart.svg";
 import 'primeicons/primeicons.css';
+import { NavLink } from "react-router-dom";
+import clsx from "clsx";
         
-
-
 const Header: React.FC = () => {
   return (
     <header className="w-full h-[192px]">
@@ -35,10 +35,58 @@ const Header: React.FC = () => {
         </div>
         {/* Menu de navegação */}
         <ul className="flex gap-3">
-             <li className="font-normal text-[#474747] text-[16px] leading-[28px] tracking-[0.75px]" >Home</li>
-             <li className="font-normal text-[#474747] text-[16px] leading-[28px] tracking-[0.75px]">Produtos</li>
-             <li className="font-normal text-[#474747] text-[16px] leading-[28px] tracking-[0.75px]">Categorias</li>
-             <li className="font-normal text-[#474747] text-[16px] leading-[28px] tracking-[0.75px]">Meus pedidos</li>
+            <li className="font-normal text-[16px] leading-[28px] tracking-[0.75px]">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  clsx(
+                    "transition-colors duration-200 hover:text-primary",
+                    isActive ? "text-primary underline underline-offset-4" : "text-dark-gray-2"
+                  )
+                }
+              >
+                Home
+              </NavLink>
+            </li>
+            <li className="font-normal text-[16px] leading-[28px] tracking-[0.75px]">
+              <NavLink
+                to="/produtos"
+                className={({ isActive }) =>
+                  clsx(
+                    "transition-colors duration-200 hover:text-primary",
+                    isActive ? "text-primary underline underline-offset-4" : "text-dark-gray-2"
+                  )
+                }
+              >
+                Produtos
+              </NavLink>
+            </li>
+            <li className="font-normal text-[16px] leading-[28px] tracking-[0.75px]">
+              <NavLink
+                to="/categorias"
+                className={({ isActive }) =>
+                  clsx(
+                    "transition-colors duration-200 hover:text-primary",
+                    isActive ? "text-primary underline underline-offset-4" : "text-dark-gray-2"
+                  )
+                }
+              >
+                Categorias
+              </NavLink>
+            </li>
+            <li className="font-normal text-[16px] leading-[28px] tracking-[0.75px]">
+              <NavLink
+                to="/meuspedidos"
+                className={({ isActive }) =>
+                  clsx(
+                    "transition-colors duration-200 hover:text-primary",
+                    isActive ? "text-primary underline underline-offset-4" : "text-dark-gray-2"
+                  )
+                }
+              >
+                Meus pedidos
+              </NavLink>
+            </li>
         </ul>
       </div>
     </header>
