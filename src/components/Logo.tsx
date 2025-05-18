@@ -1,11 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom"; 
-import logo from "../assets/logo-header.svg";
+import { Link } from "react-router-dom";
 
-const Logo: React.FC = () => {
+type Image = {
+  src: string;
+  alt?: string;
+};
+
+interface LogoProps {
+  img?: Image; 
+}
+
+const Logo: React.FC<LogoProps> = ({ img }) => {
+  const imageSrc = img?.src || "/default-logo.svg";
+  const altText = img?.alt || "Company Logo";
+
   return (
     <Link to="/">
-     <img src={logo} alt="Logo" className="w-[253px] h-[44px]" />
+      <img 
+        src={imageSrc} 
+        alt={altText} 
+        className="w-[253px] h-[44px]"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = "";
+        }}
+      />
     </Link>
   );
 };
