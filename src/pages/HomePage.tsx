@@ -161,42 +161,42 @@ const HomePage: React.FC = () => {
       </Section>
       <Section className=" bg-white max-w-full mb-40">
         <div className="max-w-7xl w-full mx-auto px-4">
-  <div className="flex flex-col md:flex-row gap-10 pt-10 items-center">
-    {/* Imagem com fundo decorativo */}
-    <div className="relative w-full max-w-md md:max-w-[573px] flex-shrink-0">
-      <div
-        className="w-64 h-64 md:w-[400px] md:h-[400px] rounded-full"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(66, 0, 255, 0.25) -40.67%, rgba(255, 255, 255, 0) 100%)",
-        }}
-      ></div>
-      <img
-        src="/tenis-1.png"
-        alt="Air Jordan"
-        className="w-full h-auto md:w-[573px] md:h-[330px] absolute top-10 -left-10 md:-left-24"
-      />
-    </div>
+          <div className="flex flex-col md:flex-row gap-10 pt-10 items-center">
+            {/* Imagem com fundo decorativo */}
+            <div className="relative w-full max-w-md md:max-w-[573px] flex-shrink-0">
+              <div
+                className="w-64 h-64 md:w-[400px] md:h-[400px] rounded-full"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(66, 0, 255, 0.25) -40.67%, rgba(255, 255, 255, 0) 100%)",
+                }}
+              ></div>
+              <img
+                src="/tenis-1.png"
+                alt="Air Jordan"
+                className="w-full h-auto md:w-[573px] md:h-[330px] absolute top-10 -left-10 md:-left-24"
+              />
+            </div>
 
-    {/* Texto e botão */}
-    <div className="w-full max-w-xl text-center md:text-left">
-      <span className="text-primary font-bold text-sm md:text-base leading-6 tracking-[0.75px] block mb-3 md:mb-5">
-        Oferta especial
-      </span>
-      <h1 className="text-[#1F1F1F] font-extrabold text-3xl sm:text-4xl md:text-[64px] leading-tight tracking-[1px] mb-4 md:mb-6">
-        Air Jordan edição de colecionador
-      </h1>
-      <p className="text-dark-gray-2 font-normal text-sm md:text-base leading-6 md:leading-7 tracking-[0.75px] mb-6 md:mb-10">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-      </p>
-      <Button
-        label="Ver Ofertas"
-        className="w-full sm:w-56 h-12 bg-[#C92071] text-[#F5F5F5] font-bold text-[16px] leading-[24px] tracking-[0.75px] rounded-lg"
-      />
-    </div>
-  </div>
+            {/* Texto e botão */}
+            <div className="w-full max-w-xl text-center md:text-left">
+              <span className="text-primary font-bold text-sm md:text-base leading-6 tracking-[0.75px] block mb-3 md:mb-5">
+                Oferta especial
+              </span>
+              <h1 className="text-[#1F1F1F] font-extrabold text-3xl sm:text-4xl md:text-[64px] leading-tight tracking-[1px] mb-4 md:mb-6">
+                Air Jordan edição de colecionador
+              </h1>
+              <p className="text-dark-gray-2 font-normal text-sm md:text-base leading-6 md:leading-7 tracking-[0.75px] mb-6 md:mb-10">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+              </p>
+              <Button
+                label="Ver Ofertas"
+                className="w-full sm:w-56 h-12 bg-[#C92071] text-[#F5F5F5] font-bold text-[16px] leading-[24px] tracking-[0.75px] rounded-lg"
+              />
+            </div>
+          </div>
         </div>
       </Section>
    </main>

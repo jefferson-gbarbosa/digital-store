@@ -8,7 +8,7 @@ type ProductCardProps = {
   priceDiscount?: number;
 };
 
-export const ProductCard: React.FC<ProductCardProps> = ({
+export  const ProductCard: React.FC<ProductCardProps> = ({
   image,
   name,
   category,
