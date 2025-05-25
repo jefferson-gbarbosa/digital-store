@@ -77,46 +77,51 @@ const Header: React.FC<HeaderProps> = ({ menuOpen, setMenuOpen }) => {
         </div>
         )}
         {/* Mobile Sidebar Menu */}
-        {menuOpen && (
-          <div className="fixed top-[72px] left-0 w-[75%] max-w-[300px] h-[calc(100vh-72px)] bg-white z-50 p-5 shadow-md flex flex-col justify-between md:hidden">
-            <div>
-              <h2 className="text-dark-gray-2 font-bold text-base leading-6 tracking-[0.75px] mt-6 mb-3">Páginas</h2>
-              <ul className="flex flex-col gap-3">
-                {navItems.map(({ path, label }) => (
-                  <li key={path}>
-                    <NavLink
-                      to={path}
-                      onClick={() => setMenuOpen(false)}
-                      className={({ isActive }) =>
-                        clsx(
-                          "font-normal text-base leading-7 tracking-[0.75px] transition-colors duration-200",
-                          isActive ? "text-primary underline underline-offset-4" : "text-dark-gray-2"
-                        )
-                      }
-                    >
-                      {label}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        
+<div
+  className={`fixed top-[72px] left-0 w-[75%] max-w-[300px] h-[calc(100vh-72px)] bg-white z-50 p-5 shadow-md flex flex-col justify-between md:hidden
+    transform transition-transform duration-500 ease-in-out
+    ${menuOpen ? "translate-x-0 pointer-events-auto" : "-translate-x-full pointer-events-none"}
+  `}
+>
+  <div>
+    <h2 className="text-dark-gray-2 font-bold text-base leading-6 tracking-[0.75px] mt-6 mb-3">Páginas</h2>
+    <ul className="flex flex-col gap-3">
+      {navItems.map(({ path, label }) => (
+        <li key={path}>
+          <NavLink
+            to={path}
+            onClick={() => setMenuOpen(false)}
+            className={({ isActive }) =>
+              clsx(
+                "font-normal text-base leading-7 tracking-[0.75px] transition-colors duration-200",
+                isActive ? "text-primary underline underline-offset-4" : "text-dark-gray-2"
+              )
+            }
+          >
+            {label}
+          </NavLink>
+        </li>
+      ))}
+    </ul>
+  </div>
 
-            <div className="border-t border-t-dark-gray-3 pt-4 flex flex-col gap-2">
-              <Button
-                label="Entrar"
-                className="bg-[#C92071] text-white font-bold rounded-lg h-10"
-                onClick={() => setMenuOpen(false)}
-              />
-              <button
-                className="text-sm underline text-center text-gray-700"
-                onClick={() => setMenuOpen(false)}
-              >
-                Cadastre-se
-              </button>
-            </div>
-          </div>
-        )}
-        {/* Desktop Header */}
+  <div className="border-t border-t-dark-gray-3 pt-4 flex flex-col gap-2">
+    <Button
+      label="Entrar"
+      className="bg-[#C92071] text-white font-bold rounded-lg h-10"
+      onClick={() => setMenuOpen(false)}
+    />
+    <button
+      className="text-sm underline text-center text-gray-700"
+      onClick={() => setMenuOpen(false)}
+    >
+      Cadastre-se
+    </button>
+  </div>
+</div>
+
+      {/* Desktop Header */}
         <div className="hidden md:flex flex-1 justify-between py-4">
           <div className="w-[253px] h-[44px]">
             <Logo img={{ src: logo, alt: "Logo Header" }} />

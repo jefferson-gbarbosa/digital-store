@@ -28,7 +28,7 @@ const Section: React.FC<SectionProps> = ({
     <section id={id} className={clsx("max-w-7xl h-full mx-auto", className)}>
       <div
         className={clsx(
-          "flex items-center gap-30 md:justify-between pt-6 ml-4",
+          "flex items-center gap-30 md:justify-between pt-6 ml-6 md:ml-4",
           isCentered && "flex-col gap-2 text-center"
         )}
       >
