@@ -2,6 +2,7 @@ import { Button } from "primereact/button";
 import Gallery from "../components/Gallery";
 import Section from "../components/Section";
 import { ProductCard } from "../components/ProductCard";
+import Ornament from "../components/Ornament";
 
 const images = [
   { src: '/home-slide-1.jpeg' },
@@ -68,7 +69,31 @@ const products = [
 const HomePage: React.FC = () => {
   return (
    <main className="bg-[#F9F8FE] max-w-full">
-      <Gallery images={images} interval={5000} />
+      <Section>
+        <div className="flex justify-center bg-[#F5F5F5] overflow-x-hidden overflow-y-hidden mb-10 py-20 md:h-[775px] md:pb-0">
+          <div className="max-w-7xl h-full mx-auto px-4 pt-10 md:pt-40 flex flex-col-reverse md:flex-row gap-8 relative">
+            <div className="max-w-[510px] text-center md:text-start">
+              <span className="text-[#F6AA1C] font-bold text-base leading-6 tracking-[0.75px] block mb-5">
+                Melhores ofertas personalizadas
+              </span>
+              <h1 className="text-[#1F1F1F] font-extrabold text-[40px] leading-[50px] tracking-[1px] md:text-[64px] md:leading-[66px] md:tracking-[1px] mb-6">
+                Queima de estoque Nike 🔥
+              </h1>
+              <p className="text-[#474747] font-normal text-[18px] leading-[34px] tracking-[0.75px] mb-10">
+                Consequat culpa exercitation mollit nisi excepteur do do tempor laboris eiusmod irure consectetur.
+              </p>
+              <Button
+                label="Ver Ofertas"
+                className="w-56 h-12 bg-[#C92071] text-[#F5F5F5] font-bold text-[16px] leading-[24px] tracking-[0.75px] rounded-lg cursor-pointer"
+              />
+            </div>
+            <div className="absolute -top-7 -right-2 md:top-8 md:-right-28 z-0">
+              <Ornament />
+            </div>
+            <Gallery images={images} interval={5000} />
+          </div>
+        </div>
+      </Section>
       <Section
         title="Coleções em destaque"
         titleAlign="left"
