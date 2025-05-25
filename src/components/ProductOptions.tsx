@@ -2,42 +2,57 @@ import { useState } from "react"
 import clsx from "clsx"
 
 type ProductOptionsProps = {
+  title: string
   options: string[]
   shape: "square" | "circle"
   type: "text" | "color"
-  radius?: string
 }
 
 export default function ProductOptions({
+  title,
   options,
   shape,
   type,
-  radius
 }: ProductOptionsProps) {
   const [selected, setSelected] = useState<string | null>(null)
 
   return (
-    <div className="flex gap-2 flex-wrap mt-4">
-      {options.map((opt) => (
-        <button
-          key={opt}
-          onClick={() => setSelected(opt)}
-          className={clsx(
-            "flex items-center justify-center border transition-all",
-            shape === "square" && "h-[46px] px-4",
-            shape === "circle" && "w-[31px] h-[31px] rounded-full",
-            type === "text" && "text-[24px] text-dark-gray-2",
-            type === "color" && "p-0",
-            selected === opt ? "border-2 border-primary" : "border border-light-gray-2",
-            shape === "square" && `rounded-[${radius}]`,
-          )}
-          style={{
-            backgroundColor: type === "color" ? opt : "transparent"
-          }}
-        >
-          {type === "text" ? opt : ""}
-        </button>
-      ))}
+    <div>
+      <h4 className="font-bold text-[14px] leading-[22px] tracking-[0.75px] text-dark-gray-2 mb-3">
+        {title}
+      </h4>
+      <div className="flex gap-3 flex-wrap">
+        {options.map((opt) => {
+          const isSelected = selected === opt
+
+          return (
+            <button
+              key={opt}
+              onClick={() => setSelected(opt)}
+              className={clsx(
+                "flex items-center justify-center transition-all",
+                shape === "square" && "h-[46px] min-w-[46px] px-4 rounded-[8px] text-[16px] font-medium border",
+                shape === "circle" && "w-[36px] h-[36px] rounded-full border-4",
+                
+                type === "text" &&
+                  (isSelected
+                    ? "bg-primary text-white border-primary"
+                    : "bg-white text-dark-gray-2 border-light-gray-2"),
+
+                type === "color" &&
+                  (isSelected
+                    ? "ring-2 ring-primary border-white"
+                    : "ring-2 ring-transparent border-white")
+              )}
+              style={{
+                ...(type === "color" ? { backgroundColor: opt } : {})
+              }}
+            >
+              {type === "text" ? opt : ""}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

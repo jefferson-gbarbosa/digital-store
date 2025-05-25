@@ -69,9 +69,9 @@ const products = [
 const HomePage: React.FC = () => {
   return (
    <main className="bg-[#F9F8FE] max-w-full">
-      <Section>
+      <Section className="xl:max-w-none">
         <div className="flex justify-center bg-[#F5F5F5] overflow-x-hidden overflow-y-hidden mb-10 py-20 md:h-[775px] md:pb-0">
-          <div className="max-w-7xl h-full mx-auto px-4 pt-10 md:pt-40 flex flex-col-reverse md:flex-row gap-8 relative">
+          <div className="h-full mx-auto pt-10 flex flex-col-reverse md:flex-row gap-8 relative">
             <div className="max-w-[510px] text-center md:text-start">
               <span className="text-[#F6AA1C] font-bold text-base leading-6 tracking-[0.75px] block mb-5">
                 Melhores ofertas personalizadas
@@ -87,7 +87,7 @@ const HomePage: React.FC = () => {
                 className="w-56 h-12 bg-[#C92071] text-[#F5F5F5] font-bold text-[16px] leading-[24px] tracking-[0.75px] rounded-lg cursor-pointer"
               />
             </div>
-            <div className="absolute -top-7 -right-2 md:top-8 md:-right-28 z-0">
+            <div className="absolute -top-9 -right-10 z-0">
               <Ornament />
             </div>
             <Gallery images={images} interval={5000} />
@@ -104,7 +104,7 @@ const HomePage: React.FC = () => {
           <div className="relative w-[338px] h-[212px] md:w-[405px] md:h-[251px] p-6 flex items-center justify-between max-w-3xl mx-auto">
             <div className="absolute inset-0 bg-[url('/collection-1.png')] bg-cover bg-bottom-right rounded-xl w-full"></div>
             <div className="relative">
-              <span className="w-[96px] h-[32px] flex gap-2.5 bg-[#E7FF86] text-[#474747] font-semibold text-sm py-1.5 px-4 rounded-3xl absolute -top-18 left-0">
+              <span className="w-[96px] h-[32px] flex gap-2.5 bg-[#E7FF86] text-[#474747] font-semibold text-sm py-1.5 px-4 rounded-3xl absolute -top-19 left-0">
                 30% OFF
               </span>
               <Button label="Comprar" className="w-[153px] h-[48px] px-6 py-2 bg-[#F5F5F5] text-[#C92071] font-bold text-base leading-6 tracking-[0.75px] rounded-lg text-center align-middle  absolute top-18 left-0 shadow hover:bg-pink-50 transition cursor-pointer" />

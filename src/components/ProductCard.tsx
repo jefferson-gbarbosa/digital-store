@@ -36,10 +36,10 @@ export  const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       <div className="mt-3 px-2 flex flex-col sm:mt-4">
-        <p className="font-bold text-[12px] text-light-gray tracking-[0.75px] leading-5">
+        <p className="font-bold text-[12px] text-light-gray-2 tracking-[0.75px] leading-5">
           {category}
         </p>
-        <h2 className="text-sm sm:text-base md:text-2xl font-medium text-light-gray-2 leading-snug">
+        <h2 className="text-sm sm:text-base md:text-2xl font-medium text-dark-gray-2 leading-snug">
           {name}
         </h2>
 
@@ -49,7 +49,7 @@ export  const ProductCard: React.FC<ProductCardProps> = ({
               <span className="text-light-gray line-through font-normal text-sm sm:text-base md:text-2xl tracking-[0.75px]">
                 R$ {price.toFixed(2)}
               </span>
-              <span className="text-black font-bold text-sm sm:text-base md:text-2xl tracking-[0.75px]">
+              <span className="text-dark-gray font-bold text-sm sm:text-base md:text-2xl tracking-[0.75px]">
                 R$ {priceDiscount!.toFixed(2)}
               </span>
             </>

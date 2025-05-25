@@ -4,9 +4,9 @@ import ProductOptions from "../components/ProductOptions"
 import Section from "../components/Section"
 import BuyBox from "../components/BuxBox"
 import { ProductListing } from "../components/ProductListing"
+import Breadcrumb from "../components/Breadcrumb"
 
 const ProductViewPage = () => {
-//   const { id } = useParams()
   // Dados simulados
   const product = {
     name: "Tênis Esportivo",    
@@ -15,15 +15,16 @@ const ProductViewPage = () => {
     rating: 123,
     price: 249.9,
     priceDiscount: 199.9,
-    description: "Um tênis ideal para corridas leves e uso casual.",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     images: [
       { src: '/home-slide-1.jpeg' },
       { src: '/home-slide-2.jpeg' },
       { src: '/home-slide-3.jpeg' },
       { src: '/home-slide-4.jpeg' },
+      { src: '/home-slide-5.jpeg' },
     ],
-    sizes: ["39", "40", "41"],
-    colors: ["#000000", "#FFFFFF", "#FF5733"]
+    sizes: ["39", "40", "41", "42", "43"],
+    colors: ["#6FEEFF", "#FF6969", "#5E5E5E", "#6D70B7"]
   }
 
  const recommended = [
@@ -47,16 +48,27 @@ const ProductViewPage = () => {
     price: 7.5,
     priceDiscount: 6.0,
   },
+    {
+    image: '/tenis.png',
+    name: "K-Swiss V8 - Masculino",
+    category: 'Tênis',
+    price: 10.0,
+    priceDiscount: 8.5,
+  },
 ];
   return (
     <div 
-     className="flex justify-center bg-[#F5F5F5] mb-10 py-20 md:pb-0 p-8 flex-col gap-16">   
+     className="flex justify-center bg-[#F5F5F5] md:pb-0 p-4 flex-col gap-8">  
+      <div className="mx-auto md:mx-45 w-full max-w-7xl">
+        <Breadcrumb />
+      </div>
       <div className="flex flex-wrap gap-8 h-full mx-auto md:mx-24 relative">
         <Gallery
           images={product.images}
           showThumbs={true}
-          width="700px"
-          height="570px"
+          showDots={false}
+          width="100%"
+          height="auto"
           radius="4px"
         />
         <BuyBox
@@ -69,26 +81,26 @@ const ProductViewPage = () => {
           description={product.description}
         >
           <ProductOptions
+            title="Tamanho"
             options={product.sizes}
             type="text"
             shape="square"
-            radius="8px"
           />
           <ProductOptions
+            title="Cor"
             options={product.colors}
             type="color"
             shape="circle"
-            radius="8px"
           />
         </BuyBox>
       </div>
-
       <Section
         title="Produtos recomendados"
         titleAlign="left"
         link={{ text: "Ver todos", href: "/produtos" }}
+        className="pt-4 pb-15"
       >
-        <ProductListing products={recommended} />
+        <ProductListing className="md:grid-cols-4 pt-8 pb-3" products={recommended} />
       </Section>
     </div>
   )

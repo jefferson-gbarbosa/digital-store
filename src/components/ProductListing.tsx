@@ -1,5 +1,6 @@
 import React from "react";
 import { ProductCard } from "./ProductCard";
+import clsx from "clsx";
 
 type Product = {
   image: string;
@@ -11,9 +12,10 @@ type Product = {
 
 type ProductListingProps = {
   products: Product[];
+  className?: string;
 };
 
-export const ProductListing: React.FC<ProductListingProps> = ({ products }) => {
+export const ProductListing: React.FC<ProductListingProps> = ({ products, className }) => {
   if (products.length === 0) {
     return (
       <div className="text-center text-dark-gray-2 text-lg py-10">
@@ -23,7 +25,7 @@ export const ProductListing: React.FC<ProductListingProps> = ({ products }) => {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
+    <div className={clsx("grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8",className)}>
       {products.map((product) => (
         <ProductCard key={product.name} {...product} />
       ))}

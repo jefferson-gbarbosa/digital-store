@@ -25,10 +25,10 @@ const Section: React.FC<SectionProps> = ({
   const isCentered = titleAlign === "center";
 
   return (
-    <section id={id} className={clsx("max-w-7xl h-full mx-auto", className)}>
+    <section id={id} className={clsx("max-w-7xl  h-full mx-auto", className)}>
       <div
         className={clsx(
-          "flex items-center gap-30 md:justify-between pt-6 ml-6 md:ml-4",
+          "flex items-center gap-30 md:justify-between pt-6 md:pt-0 ml-6 md:ml-4",
           isCentered && "flex-col gap-2 text-center"
         )}
       >
@@ -44,7 +44,7 @@ const Section: React.FC<SectionProps> = ({
         {!isCentered && link && (
           <a
             href={link.href}
-            className="text-primary text-sm md:text-[18px] leading-[22px] font-medium tracking-[0.25px] hover:underline mr-5"
+            className="text-primary text-sm md:text-[18px] leading-[22px] font-medium tracking-[0.25px] hover:underline md:ml-80"
           >
             {link.text}
             <i className="pi pi-arrow-right text-sm ml-2"></i>
@@ -55,12 +55,11 @@ const Section: React.FC<SectionProps> = ({
       {isCentered && link && (
         <a
           href={link.href}
-          className="text-primary text-sm md:text-[18px]  hover:underline mt-1"
+          className="text-primary text-sm md:text-[18px] hover:underline mt-1"
         >
           {link.text}
         </a>
       )}
-
       {children}
     </section>
   );
