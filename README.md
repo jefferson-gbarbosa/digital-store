@@ -53,7 +53,8 @@ npm run dev
 Acesse o projeto em http://localhost:5173.
 
 ```
-## 🔗 Link 
+
+## 🔗 Link
 
 - Acesse o projeto ao vivo [digitalstr.netlify.app](https://digitalstr.netlify.app/)
 

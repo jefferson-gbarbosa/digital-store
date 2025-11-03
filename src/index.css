@@ -1,25 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@theme{
+@theme {
   --color-*: initial;
 
-  --color-primary: #C92071;
-  --color-secondary: #B5B6F2;
+  --color-primary: #c92071;
+  --color-secondary: #b5b6f2;
   --color-tertiary: #991956;
-  --color-error: #EE4266; 
-  --color-success: #52CA76;
-  --color-warning: #F6AA1C;
+  --color-error: #ee4266;
+  --color-success: #52ca76;
+  --color-warning: #f6aa1c;
 
   /* Grayscale */
-  --color-dark-gray: #1F1F1F;
+  --color-dark-gray: #1f1f1f;
   --color-dark-gray-2: #474747;
   --color-dark-gray-3: #666666;
-  --color-light-gray: #8F8F8F;
-  --color-light-gray-2: #CCCCCC;
-  --color-light-gray-3: #F5F5F5;
-  --color-white: #FFFFFF;
+  --color-light-gray: #8f8f8f;
+  --color-light-gray-2: #cccccc;
+  --color-light-gray-3: #f5f5f5;
+  --color-white: #ffffff;
 
+  /* Blues */
+  --color-blue: #2962ff;
+  --color-blue-light: #ebf0ff;
 
-  --font-inter:"Inter", sans-serif;
+  /* Greens */
+  --color-green: #00875f;
+  --color-green-light: #e6f8f0;
+
+  --font-inter: 'Inter', sans-serif;
 }
