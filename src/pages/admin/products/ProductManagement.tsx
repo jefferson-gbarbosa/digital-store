@@ -1,18 +1,16 @@
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useProductStore } from '../../../stores/productStore'
 
 const ProductManagement = () => {
-  const { products, fetchProducts, deleteProduct, loading } = useProductStore()
+  // const { products, fetchProducts, deleteProduct, loading } = useProductStore()
 
   // ✅ Buscar produtos apenas uma vez
-  useEffect(() => {
-    fetchProducts()
-  }, [fetchProducts])
+  // useEffect(() => {
+  //   fetchProducts()
+  // }, [fetchProducts])
 
-  const handleDeleteProduct = async (productId: number) => {
-    await deleteProduct(productId)
-  }
+  // const handleDeleteProduct = async (productId: number) => {
+  //   await deleteProduct(productId)
+  // }
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -28,7 +26,7 @@ const ProductManagement = () => {
       </div>
 
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
-        {loading ? (
+        {/* {loading ? (
           <div className="p-6 text-center text-gray-500">
             Loading products...
           </div>
@@ -79,7 +77,8 @@ const ProductManagement = () => {
               )}
             </tbody>
           </table>
-        )}
+        )} */}
+        Table
       </div>
     </div>
   )

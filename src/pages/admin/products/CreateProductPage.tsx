@@ -2,10 +2,9 @@ import z from 'zod'
 import { InputField, InputRoot } from '../../../components/ui/Input'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useProductStore, ProductInput } from '../../../stores/productStore'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm, SubmitHandler } from 'react-hook-form'
-import { useCategoryStore } from '../../../stores/categoryStore'
 
 // Schema simplificado e compatível
 const ProductSchema = z.object({
@@ -17,18 +16,12 @@ const ProductSchema = z.object({
   stock: z.number().min(0, 'Estoque deve ser positivo'),
   enabled: z.boolean(),
   category_ids: z.array(z.number()),
-  images: z.array(
-    z.object({
-      id: z.number().optional(),
-      content: z.string(),
-      type: z.string(),
-    }),
-  ),
+  images: z.array(z.instanceof(File)).min(1, 'Selecione pelo menos uma imagem'),
   options: z.array(
     z.object({
-      title: z.string(),
-      type: z.string(),
-      values: z.array(z.string()),
+      title: z.string().min(1, 'Título é obrigatório'),
+      type: z.string().min(1, 'Tipo é obrigatório'),
+      values: z.array(z.string().min(1, 'Valor não pode estar vazio')),
     }),
   ),
 })
@@ -36,18 +29,10 @@ const ProductSchema = z.object({
 // Tipo para o formulário baseado no schema
 type ProductFormData = z.infer<typeof ProductSchema>
 
-// Mock de categorias
-// const MOCK_CATEGORIES = [
-//   { id: 1, name: 'Eletrônicos' },
-//   { id: 2, name: 'Roupas' },
-//   { id: 3, name: 'Casa' },
-//   { id: 4, name: 'Esportes' },
-// ]
-
 function CreateProductPage() {
   const navigate = useNavigate()
-  const { createProduct, creating } = useProductStore()
-  const { categories, loading, fetchCategories } = useCategoryStore()
+  // const { createProduct, creating } = useProductStore()
+  // const { categories, loading, fetchCategories } = useCategoryStore()
   const [previewImages, setPreviewImages] = useState<string[]>([])
 
   // useForm com tipo explícito e defaultValues compatíveis
@@ -74,9 +59,9 @@ function CreateProductPage() {
     },
   })
 
-  useEffect(() => {
-    fetchCategories({ limit: -1 }) // busca todas as categorias
-  }, [fetchCategories])
+  // useEffect(() => {
+  //   fetchCategories({ limit: -1 }) // busca todas as categorias
+  // }, [fetchCategories])
 
   // Field Array para opções
   const { fields, append, remove } = useFieldArray({
@@ -101,69 +86,44 @@ function CreateProductPage() {
     const files = e.target.files
     if (!files) return
 
-    const imagePromises = Array.from(files).map((file) => {
-      return new Promise<{ id?: number; content: string; type: string }>(
-        (resolve) => {
-          const reader = new FileReader()
-          reader.onloadend = () => {
-            const base64 = reader.result as string
-            resolve({
-              id: undefined,
-              content: base64,
-              type: file.type,
-            })
-          }
-          reader.readAsDataURL(file)
-        },
-      )
-    })
+    const selectedFiles = Array.from(files)
+    const previews = selectedFiles.map((f) => URL.createObjectURL(f))
 
-    const newImages = await Promise.all(imagePromises)
-    const newPreviews = newImages.map((img) => img.content)
-
-    setPreviewImages((prev) => [...prev, ...newPreviews])
-    setValue('images', [...watch('images'), ...newImages], {
-      shouldValidate: true,
-    })
+    setPreviewImages((prev) => [...prev, ...previews])
+    const current = watch('images') || []
+    setValue('images', [...current, ...selectedFiles], { shouldValidate: true })
   }
 
   // Remover imagem do preview
   const removeImage = (index: number) => {
-    const currentImages = watch('images')
-    const currentPreviews = [...previewImages]
-
-    currentPreviews.splice(index, 1)
-    const updatedImages = currentImages.filter((_, i) => i !== index)
-
-    setPreviewImages(currentPreviews)
-    setValue('images', updatedImages, { shouldValidate: true })
+    const updated = watch('images').filter((_, i) => i !== index)
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index))
+    setValue('images', updated, { shouldValidate: true })
   }
-
-  // Manipular seleção de categorias
-  // const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const selectedOptions = Array.from(e.target.selectedOptions)
-  //   const categoryIds = selectedOptions.map((option) => Number(option.value))
-  //   setValue('category_ids', categoryIds, { shouldValidate: true })
-  // }
 
   // Envio do formulário - corrigido o tipo
   const onSubmit: SubmitHandler<ProductFormData> = async (formData) => {
     try {
-      // Converter do formulário para o tipo do store
-      const productData: ProductInput = {
+      // ✅ Monta um objeto ProductInput (não FormData)
+      const productInput = {
         name: formData.name,
         slug: formData.slug,
-        description: formData.description || undefined,
+        description: formData.description || '',
         price: formData.price,
-        price_with_discount: formData.price_with_discount || undefined,
+        price_with_discount: formData.price_with_discount || 0,
         stock: formData.stock,
         enabled: formData.enabled,
         category_ids: formData.category_ids,
-        images: formData.images,
+        images: formData.images, // deve ser File[]
         options: formData.options,
       }
 
-      await createProduct(productData)
+      // Debug
+      console.log('📦 Enviando ao backend:', productInput)
+
+      // ✅ Chama a função da store (ela mesma transforma em FormData)
+      // await createProduct(productInput)
+
       navigate('/admin/products')
     } catch (error) {
       console.error('Falha ao criar produto:', error)
@@ -265,7 +225,7 @@ function CreateProductPage() {
                 setValueAs: (val) => Array.from(val).map(Number),
               })}
             >
-              {loading ? (
+              {/* {loading ? (
                 <option disabled>Carregando categorias...</option>
               ) : errors.category_ids ? (
                 <option disabled>{errors.category_ids.message}</option>
@@ -277,7 +237,7 @@ function CreateProductPage() {
                 ))
               ) : (
                 <option disabled>Nenhuma categoria encontrada</option>
-              )}
+              )} */}
             </select>
             <p className="text-sm text-gray-500 mt-1">
               Mantenha Ctrl pressionado para selecionar múltiplas categorias
@@ -321,7 +281,7 @@ function CreateProductPage() {
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs cursor-pointer"
                   >
                     ×
                   </button>
@@ -344,7 +304,7 @@ function CreateProductPage() {
               <button
                 type="button"
                 onClick={() => append({ title: '', type: '', values: [] })}
-                className="bg-primary text-white px-3 py-1 rounded text-sm"
+                className="bg-primary text-white px-3 py-1 rounded text-sm cursor-pointer"
               >
                 + Adicionar Opção
               </button>
@@ -404,7 +364,7 @@ function CreateProductPage() {
                 <button
                   type="button"
                   onClick={() => remove(index)}
-                  className="text-red-500 text-sm mt-2 hover:text-red-700"
+                  className="text-red-500 text-sm mt-2 hover:text-red-700 cursor-pointer"
                 >
                   Remover Opção
                 </button>
@@ -417,16 +377,16 @@ function CreateProductPage() {
             <button
               type="button"
               onClick={() => navigate('/admin/products')}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              className="bg-warning  hover:bg-dark-gray-3 text-white px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              disabled={creating}
-              className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              // disabled={creating}
+              className="bg-primary hover:bg-tertiary text-white px-6 py-2 rounded cursor-pointer"
             >
-              {creating ? 'Criando Produto...' : 'Criar Produto'}
+              {/* {creating ? 'Criando Produto...' : 'Criar Produto'} */}
             </button>
           </div>
         </form>

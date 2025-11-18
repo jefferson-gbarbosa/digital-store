@@ -1,17 +1,16 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuthStore } from '../../stores/authStore'
 
 function DeleteAccount() {
-  const { user, logout } = useAuthStore()
+  // const { user, logout } = useAuthStore()
   const navigate = useNavigate()
 
   const handleDelete = async () => {
-    if (!user?.id) return
-    const confirm = window.confirm(
-      'Tem certeza que deseja excluir sua conta? Essa ação é irreversível!',
-    )
-    if (!confirm) return
-    logout()
+    // if (!user?.id) return
+    // const confirm = window.confirm(
+    //   'Tem certeza que deseja excluir sua conta? Essa ação é irreversível!',
+    // )
+    // if (!confirm) return
+    // logout()
     navigate('/')
   }
   return (

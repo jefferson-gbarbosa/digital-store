@@ -1,10 +1,7 @@
-import { useEffect } from 'react'
 import { InputField, InputRoot } from '../ui/Input'
 import z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useUserStore } from '../../stores/userStore'
-import { useAuthStore } from '../../stores/authStore'
 
 const profileSchema = z.object({
   firstname: z.string().min(1, 'Nome obrigatório'),
@@ -15,38 +12,38 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>
 
 function ProfileForm() {
-  const { user } = useAuthStore()
-  const { fetchUserById, updateUser } = useUserStore()
+  // const { user } = useAuthStore()
+  // const { fetchUserById, updateUser } = useUserStore()
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ProfileFormData>({ resolver: zodResolver(profileSchema) })
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchUserById(user.id).then((data) =>
-        reset({
-          firstname: data?.firstname,
-          surname: data?.surname,
-          email: data?.email,
-        }),
-      )
-    }
-  }, [user, fetchUserById, reset])
+  // useEffect(() => {
+  //   if (user?.id) {
+  //     fetchUserById(user.id).then((data) =>
+  //       reset({
+  //         firstname: data?.firstname,
+  //         surname: data?.surname,
+  //         email: data?.email,
+  //       }),
+  //     )
+  //   }
+  // }, [user, fetchUserById, reset])
 
   const onSubmit = async (data: ProfileFormData) => {
-    if (!user?.id) return
-    await updateUser(
-      user.id,
-      data.firstname,
-      data.surname,
-      data.email,
-      user.role,
-    )
-    alert('Perfil atualizado com sucesso!')
+    // if (!user?.id) return
+    // await updateUser(
+    //   user.id,
+    //   data.firstname,
+    //   data.surname,
+    //   data.email,
+    //   user.role,
+    // )
+    // alert('Perfil atualizado com sucesso!')
+    console.log(data)
   }
 
   return (

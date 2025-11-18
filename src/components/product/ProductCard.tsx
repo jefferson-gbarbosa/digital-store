@@ -1,19 +1,26 @@
 import React from 'react'
 
 type ProductCardProps = {
+  _id: string
   image: string
   name: string
   category: string
   price: number
   priceDiscount?: number
+  onClick?: () => void
 }
 
+const formatPrice = (value: number) =>
+  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+
 export const ProductCard: React.FC<ProductCardProps> = ({
+  _id,
   image,
   name,
   category,
   price,
   priceDiscount,
+  onClick,
 }) => {
   const hasDiscount = typeof priceDiscount === 'number'
   const discountPercentage = hasDiscount
@@ -21,7 +28,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     : 0
 
   return (
-    <div className="w-full max-w-[300px] flex flex-col rounded-xl">
+    <div
+      data-id={_id}
+      className="w-full max-w-[300px] flex flex-col rounded-xl cursor-pointer"
+      onClick={onClick}
+    >
       <div className="relative aspect-[3/4] bg-white flex items-center justify-center rounded-lg shadow-sm hover:shadow-md transition">
         {hasDiscount && (
           <span className="absolute top-2 left-2 bg-[#E7FF86] font-bold text-xs sm:text-sm leading-[22px] tracking-[0.75px] py-1 px-3 rounded-full">
@@ -47,15 +58,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {hasDiscount ? (
             <>
               <span className="text-light-gray line-through font-normal text-sm sm:text-base md:text-2xl tracking-[0.75px]">
-                R$ {price.toFixed(2)}
+                {formatPrice(price)}
               </span>
               <span className="text-dark-gray font-bold text-sm sm:text-base md:text-2xl tracking-[0.75px]">
-                R$ {priceDiscount!.toFixed(2)}
+                {formatPrice(priceDiscount!)}
               </span>
             </>
           ) : (
             <span className="text-dark-gray font-bold text-sm sm:text-base md:text-2xl tracking-[0.75px]">
-              R$ {price.toFixed(2)}
+              {formatPrice(price)}
             </span>
           )}
         </div>

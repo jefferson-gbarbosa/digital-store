@@ -1,170 +1,150 @@
 import { create } from 'zustand'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3000/v1'
+const API_URL = 'http://localhost:3000/api/products'
 axios.defaults.withCredentials = true
 
-export interface ProductOption {
+// Tipagem do produto
+export interface Product {
+  _id: string
   title: string
+  description: string
+  price: {
+    value: number
+    currency: string
+  }
+  sizes: string[]
+  images: string[]
+  category: string
   type: string
-  values: string[]
+  popular?: boolean
+  inStock?: boolean
+  createdAt?: string
+  updatedAt?: string
 }
 
-export interface ProductImage {
-  id?: number
-  content: string
-  type: string
-}
-
-export interface ProductInput {
-  name: string
-  slug: string
-  stock: number
-  description?: string
-  price: number
-  price_with_discount?: number
-  enabled?: boolean
-  category_ids: number[]
-  images: ProductImage[]
-  options: ProductOption[]
-}
-
-export interface Product extends ProductInput {
-  id: number
-  created_at: string
-  updated_at: string
-}
-
+// Tipagem do Store
 interface ProductStore {
   products: Product[]
-  currentProduct: Product | null
   loading: boolean
-  creating: boolean
-  updating: boolean
+  selectedProduct: Product | null
   error: string | null
 
+  // Ações Sync
+  setProducts: (products: Product[]) => void
+  setLoading: (state: boolean) => void
+  setSelectedProduct: (product: Product | null) => void
+  setError: (message: string | null) => void
+
+  // Ações Async
   fetchProducts: () => Promise<void>
-  searchProducts: (params: Record<string, string | number>) => Promise<void>
-  fetchProductById: (id: number) => Promise<Product | null>
-  createProduct: (data: ProductInput) => Promise<void>
-  updateProduct: (id: number, data: Partial<ProductInput>) => Promise<void>
-  deleteProduct: (id: number) => Promise<void>
+  fetchProductById: (id: string) => Promise<void>
+  createProduct: (data: unknown, images: File[]) => Promise<boolean>
+  toggleStock: (id: string, inStock: boolean) => Promise<boolean>
 }
 
-export const useProductStore = create<ProductStore>((set, get) => ({
+export const useProductStore = create<ProductStore>((set) => ({
   products: [],
-  currentProduct: null,
   loading: false,
-  creating: false,
-  updating: false,
+  selectedProduct: null,
   error: null,
 
-  // 🔹 Listar todos os produtos
+  setProducts: (products) => set({ products }),
+  setLoading: (state) => set({ loading: state }),
+  setSelectedProduct: (product) => set({ selectedProduct: product }),
+  setError: (message) => set({ error: message }),
+
+  // Buscar todos os produtos
   fetchProducts: async () => {
-    set({ loading: true, error: null })
     try {
-      const { data } = await axios.get<Product[]>(`${API_URL}/product`)
-      set({ products: data, loading: false })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Erro ao carregar produtos'
-      console.error('Erro ao buscar produtos:', message)
-      set({ error: message })
-    } finally {
-      set({ loading: false })
-    }
-  },
-  searchProducts: async (params = {}) => {
-    set({ loading: true, error: null })
-    try {
-      const { data } = await axios.get(`${API_URL}/product/search`, { params })
-      set({ products: data.data })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Erro na busca de produtos'
-      set({ error: message })
-    } finally {
-      set({ loading: false })
-    }
-  },
-  // 🔹 Buscar um produto pelo ID
-  fetchProductById: async (id) => {
-    set({ loading: true, error: null })
-    try {
-      const { data } = await axios.get<Product>(`${API_URL}/product/${id}`)
-      set({ currentProduct: data })
-      return data
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Erro ao buscar produto'
-      console.error(message)
-      set({ error: message })
-      return null
-    } finally {
-      set({ loading: false })
-    }
-  },
+      set({ loading: true, error: null })
+      const { data } = await axios.get(`${API_URL}`)
 
-  // 🔹 Criar novo produto
-  createProduct: async (data: ProductInput) => {
-    try {
-      set({ creating: true, error: null })
-      const payload: ProductInput = {
-        ...data,
-        description: data.description || undefined,
-        price_with_discount: data.price_with_discount || undefined,
-        enabled: data.enabled ?? true,
-        category_ids: data.category_ids || [],
-        images: data.images || [],
-        options: data.options || [],
+      if (data.success) {
+        set({ products: data.products })
+      } else {
+        set({ error: data.message })
       }
-      const response = await axios.post(`${API_URL}/product`, payload)
-      set((state) => ({
-        products: [...state.products, response.data],
-        creating: false,
-      }))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Erro ao criar produto'
-      console.error(message)
-      set({ error: message })
-      throw new Error(message)
+    } catch {
+      set({ error: 'Erro ao carregar produtos' })
     } finally {
-      set({ creating: false })
+      set({ loading: false })
     }
   },
 
-  // 🔹 Atualizar produto existente
-  updateProduct: async (id: number, data: Partial<ProductInput>) => {
-    set({ updating: true })
+  // Buscar um único produto — POST /single com productId
+  fetchProductById: async (id: string) => {
     try {
-      const response = await axios.put(`${API_URL}/product/${id}`, data)
-      set((state) => ({
-        products: state.products.map((p) => (p.id === id ? response.data : p)),
-        currentProduct: response.data,
-      }))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Erro ao atualizar produto'
-      console.error(message)
-      set({ error: message })
-      throw new Error(message)
+      set({ loading: true, error: null })
+
+      const { data } = await axios.post(`${API_URL}/single`, { productId: id })
+
+      if (data.success) {
+        set({ selectedProduct: data.product })
+      } else {
+        set({ error: data.message })
+      }
+    } catch {
+      set({ error: 'Erro ao carregar produto' })
     } finally {
-      set({ updating: false })
+      set({ loading: false })
     }
   },
 
-  // 🔹 Deletar produto
-  deleteProduct: async (id: number) => {
+  // Criar produto com imagens
+  createProduct: async (productData: unknown, images: File[]) => {
     try {
-      await axios.delete(`${API_URL}/product/${id}`)
-      set({ products: get().products.filter((p) => p.id !== id) })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Erro ao deletar produto'
-      console.error(message)
-      set({ error: message })
-      throw new Error(message)
+      set({ loading: true, error: null })
+
+      const formData = new FormData()
+      formData.append('product', JSON.stringify(productData))
+      images.forEach((img) => formData.append('images', img))
+
+      const { data } = await axios.post(`${API_URL}`, formData)
+
+      if (!data.success) {
+        set({ error: data.message })
+        return false
+      }
+
+      await useProductStore.getState().fetchProducts()
+      return true
+    } catch {
+      set({ error: 'Erro ao criar produto' })
+      return false
+    } finally {
+      set({ loading: false })
+    }
+  },
+
+  // Alterar status de estoque — POST /toggle-stock com { productId, inStock }
+  toggleStock: async (id: string, inStock: boolean) => {
+    try {
+      set({ loading: true, error: null })
+
+      const { data } = await axios.post(`${API_URL}/toggle-stock`, {
+        productId: id,
+        inStock,
+      })
+
+      if (!data.success) {
+        set({ error: data.message })
+        return false
+      }
+
+      // Atualiza localmente
+      set((state) => ({
+        products: state.products.map((p) =>
+          p._id === id ? { ...p, inStock } : p,
+        ),
+      }))
+
+      return true
+    } catch {
+      set({ error: 'Erro ao atualizar estoque' })
+      return false
+    } finally {
+      set({ loading: false })
     }
   },
 }))

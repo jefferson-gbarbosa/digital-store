@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom'
-import { useOrderStore } from '../../../stores/orderStore'
-import { useEffect } from 'react'
 
 const AdminPage = () => {
-  const { orders, fetchOrders } = useOrderStore()
-  useEffect(() => {
-    fetchOrders()
-  }, [fetchOrders])
+  // const { orders, fetchOrders } = useOrderStore()
+  // useEffect(() => {
+  //   fetchOrders()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Admin Dasboard</h1>
@@ -43,7 +42,7 @@ const AdminPage = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.length > 0 ? (
+              {/* {orders.length > 0 ? (
                 orders.map((order) => (
                   <tr
                     key={order.id}
@@ -61,7 +60,7 @@ const AdminPage = () => {
                     No orders found.
                   </td>
                 </tr>
-              )}
+              )} */}
             </tbody>
           </table>
         </div>

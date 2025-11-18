@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import 'primeicons/primeicons.css'
 import { AdminSideBar } from '../../../components/admin/AdminSideBar'
 
 const AdminLayout = () => {

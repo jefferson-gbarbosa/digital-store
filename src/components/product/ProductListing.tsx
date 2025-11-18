@@ -1,8 +1,10 @@
 import React from 'react'
 import clsx from 'clsx'
 import { ProductCard } from './ProductCard'
+import { useNavigate } from 'react-router-dom'
 
 type Product = {
+  _id: string
   image: string
   name: string
   category: string
@@ -19,6 +21,8 @@ export const ProductListing: React.FC<ProductListingProps> = ({
   products,
   className,
 }) => {
+  const navigate = useNavigate()
+
   if (products.length === 0) {
     return (
       <div className="text-center text-dark-gray-2 text-lg py-10">
@@ -35,7 +39,11 @@ export const ProductListing: React.FC<ProductListingProps> = ({
       )}
     >
       {products.map((product) => (
-        <ProductCard key={product.name} {...product} />
+        <ProductCard
+          key={product._id}
+          {...product}
+          onClick={() => navigate(`/collection/${product._id}`)}
+        />
       ))}
     </div>
   )

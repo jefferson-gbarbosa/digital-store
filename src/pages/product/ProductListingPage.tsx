@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import Section from '../../../components/layout/Section'
-import { FilterGroup } from '../../../components/shared/FilterGroup'
-import { ProductListing } from '../../../components/product/ProductListing'
+import Section from '../../components/layout/Section'
+import { FilterGroup } from '../../components/shared/FilterGroup'
+import { ProductListing } from '../../components/product/ProductListing'
 
 const ProductListingPage = () => {
   const [searchParams] = useSearchParams()
@@ -13,6 +13,7 @@ const ProductListingPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialProducts = [
     {
+      _id: '1',
       image: '/tenis.png',
       category: 'Tênis',
       name: 'K-Swiss V8 - Masculino',
@@ -20,12 +21,14 @@ const ProductListingPage = () => {
       priceDiscount: 4.49,
     },
     {
+      _id: '2',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
       price: 12.75,
     },
     {
+      _id: '3',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
@@ -33,12 +36,14 @@ const ProductListingPage = () => {
       priceDiscount: 6.0,
     },
     {
+      _id: '4',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
       price: 8.25,
     },
     {
+      _id: '5',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
@@ -46,18 +51,21 @@ const ProductListingPage = () => {
       priceDiscount: 8.5,
     },
     {
+      _id: '6',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
       price: 3.99,
     },
     {
+      _id: '7',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
       price: 2.5,
     },
     {
+      _id: '8',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',

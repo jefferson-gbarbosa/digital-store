@@ -1,14 +1,13 @@
 import React from 'react'
-import { Badge } from 'primereact/badge'
-import cartIcon from '../../assets/icons/mini-cart.svg'
-import 'primeicons/primeicons.css'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 import logo from '../../assets/logos/logo-header.svg'
-import { useAuthStore } from '../../stores/authStore'
 import Logo from '../shared/Logo'
 import SearchBar from '../shared/SearchBar'
-import { useProductStore } from '../../stores/productStore'
+import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
+import { Menu, Search, ShoppingCart, X } from 'lucide-react'
+import Badge from '../ui/Badge'
+import { useCartStore } from '../../stores/cartStore'
 
 interface HeaderProps {
   menuOpen: boolean
@@ -16,36 +15,43 @@ interface HeaderProps {
 }
 
 const Header = ({ menuOpen, setMenuOpen }: HeaderProps) => {
-  const { isAuthenticated, user, logout } = useAuthStore()
-  const { searchProducts, products } = useProductStore()
   const navigate = useNavigate()
+  const { openSignIn } = useClerk()
+  const { isSignedIn } = useUser()
   const [searchOpen, setSearchOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState('')
+  // const totalItems = useCartStore((state) => state.totalItems)
+  // const lastUpdated = useCartStore((state) => state.lastUpdated)
 
   const navItems = [
     { path: '/', label: 'Home' },
-    { path: '/produtos', label: 'Produtos' },
+    { path: '/collection', label: 'Produtos' },
     { path: '/categorias', label: 'Categorias' },
   ]
-  async function handleLogout() {
-    await logout()
-    navigate('/')
-  }
 
-  React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (searchQuery.trim()) {
-        searchProducts({ q: searchQuery })
-      }
-    }, 500)
+  const items = useCartStore((state) => state.items)
+  const lastUpdated = useCartStore((state) => state.lastUpdated)
 
-    return () => clearTimeout(timeout)
-  }, [searchQuery, searchProducts])
+  // ✅ Calcular totalItems baseado nos items (reativo)
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
+  // React.useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     if (searchQuery.trim()) {
+  //       searchProducts({ q: searchQuery })
+  //     }
+  //   }, 500)
+
+  //   return () => clearTimeout(timeout)
+  // }, [searchQuery, searchProducts])
 
   const handleSelectProduct = (id: number) => {
     navigate(`/produtos/${id}`)
     setSearchQuery('')
     setSearchOpen(false)
+  }
+
+  const handleNavClick = () => {
+    setMenuOpen(false)
   }
 
   return (
@@ -61,14 +67,13 @@ const Header = ({ menuOpen, setMenuOpen }: HeaderProps) => {
         <div className="flex items-center justify-between w-full md:hidden">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Abrir menu"
+            aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
           >
-            <i
-              className={clsx(
-                'text-2xl cursor-pointer transition-colors duration-200',
-                menuOpen ? 'pi pi-times' : 'pi pi-align-justify text-dark-gray',
-              )}
-            />
+            {menuOpen ? (
+              <X className="text-2xl cursor-pointer transition-colors duration-200" />
+            ) : (
+              <Menu className="text-2xl cursor-pointer transition-colors duration-200" />
+            )}
           </button>
 
           <div className="w-[138px] h-[24px] flex items-center">
@@ -76,36 +81,32 @@ const Header = ({ menuOpen, setMenuOpen }: HeaderProps) => {
           </div>
 
           <div className="relative flex items-center gap-3">
-            <i
-              className={clsx(
-                'pi pi-search cursor-pointer transition-colors duration-200',
-                searchOpen ? 'text-primary' : 'text-light-gray-2 opacity-60',
-              )}
+            <button
               onClick={() => setSearchOpen(!searchOpen)}
-            />
-
-            {/* Ícones para usuário comum ou visitante */}
-            {user?.role !== 'admin' && (
-              <>
-                {isAuthenticated && (
-                  <NavLink to="/profile" aria-label="Meu Perfil">
-                    <i className="pi pi-user text-xl text-light-gray-2 opacity-80" />
-                  </NavLink>
-                )}
-                <NavLink
-                  to="/carrinho"
-                  className="relative"
-                  aria-label="Carrinho de compras"
-                >
-                  <img src={cartIcon} alt="Carrinho de compras" />
-                  <Badge
-                    value="3"
-                    severity="danger"
-                    className="absolute -top-2 -right-3 w-[18px] h-[18px] text-[12px] font-inter font-bold leading-[18px] tracking-[0.5px] text-[#FFFFFF] bg-[#EE4266]"
-                  />
-                </NavLink>
-              </>
-            )}
+              aria-label={searchOpen ? 'Fechar pesquisa' : 'Abrir pesquisa'}
+            >
+              {searchOpen ? (
+                <X
+                  className={clsx(
+                    'cursor-pointer transition-colors duration-200',
+                    'text-primary',
+                  )}
+                />
+              ) : (
+                <Search
+                  className={clsx(
+                    'cursor-pointer transition-colors duration-200',
+                    'text-light-gray-2 opacity-60 hover:text-primary',
+                  )}
+                />
+              )}
+            </button>
+            <div className="flex items-center gap-4 px-4 cursor-pointer">
+              <div className="relative">
+                <ShoppingCart onClick={() => navigate('/cart')} />
+                <Badge value={totalItems} pulseKey={lastUpdated} />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -121,8 +122,8 @@ const Header = ({ menuOpen, setMenuOpen }: HeaderProps) => {
               placeholder="Pesquisar produto..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onSearchClick={() => searchProducts({ q: searchQuery })}
-              suggestions={products.map((p) => ({ id: p.id, name: p.name }))}
+              // onSearchClick={() => searchProducts({ q: searchQuery })}
+              // suggestions={products.map((p) => ({ id: p.id, name: p.name }))}
               onSelectSuggestion={handleSelectProduct}
               autoFocus
             />
@@ -162,47 +163,35 @@ const Header = ({ menuOpen, setMenuOpen }: HeaderProps) => {
           </div>
 
           <div className="border-t border-t-dark-gray-3 pt-4 flex flex-col gap-2">
-            {isAuthenticated ? (
-              <>
-                {user?.role === 'admin' && (
-                  <Link
-                    to="/admin"
-                    className="flex justify-center items-center h-10 bg-dark-gray text-white text-sm font-bold rounded-lg hover:bg-light-gray-2 hover:text-dark-gray transition-colors duration-300 cursor-pointer"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                )}
-                <span className="text-dark-gray-2 text-center py-2">
-                  Olá, {user?.firstname}
-                </span>
+            {isSignedIn ? (
+              <div className="flex flex-col gap-2">
+                <UserButton
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: {
+                        width: '32px',
+                        height: '32px',
+                      },
+                    },
+                  }}
+                />
                 <button
                   onClick={() => {
-                    handleLogout()
-                    setMenuOpen(false)
+                    navigate('/my-orders')
+                    handleNavClick()
                   }}
-                  className="flex justify-center items-center h-10 bg-primary text-white text-sm font-bold rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
+                  className="flex items-center gap-2 text-dark-gray-2 hover:text-primary transition-colors cursor-pointer"
                 >
-                  Sair
+                  <span>Meus Pedidos</span>
                 </button>
-              </>
+              </div>
             ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="bg-primary text-white font-bold rounded-lg h-10 flex justify-center items-center"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Entrar
-                </Link>
-                <Link
-                  to="/cadastro"
-                  className="text-sm underline text-center text-gray-700"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Cadastre-se
-                </Link>
-              </>
+              <button
+                onClick={() => openSignIn()}
+                className="flex justify-center items-center w-28 h-10 bg-primary text-white text-sm font-bold rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
+              >
+                Entrar
+              </button>
             )}
           </div>
         </div>
@@ -217,62 +206,58 @@ const Header = ({ menuOpen, setMenuOpen }: HeaderProps) => {
               placeholder="Pesquisar produto..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onSearchClick={() => searchProducts({ q: searchQuery })}
-              suggestions={products.map((p) => ({ id: p.id, name: p.name }))}
+              // onSearchClick={() => searchProducts({ q: searchQuery })}
+              // suggestions={products.map((p) => ({ id: p.id, name: p.name }))}
               onSelectSuggestion={handleSelectProduct}
               autoFocus
             />
           </div>
+
           <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              <>
-                <span className="text-dark-gray-2">Olá, {user?.firstname}</span>
-                {user?.role === 'admin' ? (
-                  <Link
-                    to="/admin"
-                    className="flex justify-center items-center w-28 h-10 bg-dark-gray text-white text-sm font-bold rounded-lg hover:bg-light-gray-2 hover:text-dark-gray transition-colors duration-300 cursor-pointer"
-                  >
-                    Dashboard
-                  </Link>
-                ) : (
-                  <NavLink to="/profile" aria-label="Meu Perfil">
-                    <i className="pi pi-user text-xl text-dark-gray-2 hover:text-primary" />
-                  </NavLink>
-                )}
+            {isSignedIn ? (
+              <div className="flex items-center gap-4">
                 <button
-                  onClick={handleLogout}
-                  className="flex justify-center items-center w-28 h-10 bg-primary text-white text-sm font-bold rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
+                  onClick={() => navigate('/my-orders')}
+                  className="flex items-center gap-2 text-dark-gray-2 hover:text-primary transition-colors p-2 cursor-pointer"
+                  aria-label="Meus pedidos"
                 >
-                  Sair
+                  <div className="flex items-center gap-4 px-4 cursor-pointer">
+                    <div className="relative">
+                      <ShoppingCart size={20} />
+                      <Badge value={totalItems} pulseKey={lastUpdated} />
+                    </div>
+                  </div>
+                  <span className="text-sm">Meus Pedidos</span>
                 </button>
-              </>
+                <UserButton
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: {
+                        width: '42px',
+                        height: '42px',
+                      },
+                      userButtonTrigger: {
+                        '&:focus': {
+                          boxShadow: '0 0 0 2px rgba(0, 0, 0, 0.1)',
+                        },
+                      },
+                    },
+                  }}
+                />
+              </div>
             ) : (
-              <>
-                <Link
-                  to="/cadastro"
-                  className="text-dark-gray-2 hover:text-primary underline"
-                >
-                  Cadastre-se
-                </Link>
-                <Link
-                  to="/login"
+              <div className="flex items-center gap-4 px-4 cursor-pointer">
+                <div className="relative">
+                  <ShoppingCart onClick={() => navigate('/cart')} />
+                  <Badge value={totalItems} pulseKey={lastUpdated} />
+                </div>
+                <button
+                  onClick={() => openSignIn()}
                   className="flex justify-center items-center w-28 h-10 bg-primary text-white text-sm font-bold rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
                 >
                   Entrar
-                </Link>
-              </>
-            )}
-
-            {/* Carrinho visível para clientes e visitantes */}
-            {(!isAuthenticated || user?.role === 'customer') && (
-              <NavLink to="/carrinho" className="relative">
-                <img src={cartIcon} alt="Carrinho de compras" />
-                <Badge
-                  value="3"
-                  severity="danger"
-                  className="absolute -top-2 -right-3 w-[18px] h-[18px] text-[12px] font-inter font-bold leading-[18px] tracking-[0.5px] text-[#FFFFFF] bg-[#EE4266]"
-                />
-              </NavLink>
+                </button>
+              </div>
             )}
           </div>
         </div>

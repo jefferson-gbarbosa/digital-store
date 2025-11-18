@@ -1,11 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
-import { useAuthStore } from '../../../stores/authStore'
+
 import { InputField, InputRoot } from '../../../components/ui/Input'
 import { Link } from 'react-router-dom'
-import { useUserStore } from '../../../stores/userStore'
 
 const userSchema = z
   .object({
@@ -30,80 +29,81 @@ type User = {
   role: 'customer' | 'admin'
 }
 
-type ApiUser = {
-  id: number
-  firstname: string
-  surname: string
-  email: string
-  role: 'customer' | 'admin'
-}
+// type ApiUser = {
+//   id: number
+//   firstname: string
+//   surname: string
+//   email: string
+//   role: 'customer' | 'admin'
+// }
 
 const UserManagement = () => {
-  const { signupAdmin } = useAuthStore()
-  const { fetchUsers, deleteUser } = useUserStore()
-  const [users, setUsers] = useState<User[]>([])
+  // const { signupAdmin } = useAuthStore()
+  // const { fetchUsers, deleteUser } = useUserStore()
+  const [users] = useState<User[]>([])
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
   })
 
-  useEffect(() => {
-    const loadUsers = async () => {
-      const fetchedUsers = await fetchUsers()
-      if (fetchedUsers) {
-        const formattedUsers = (fetchedUsers as ApiUser[]).map((u) => ({
-          _id: u.id,
-          name: u.firstname,
-          surname: u.surname,
-          email: u.email,
-          role: u.role,
-        }))
-        setUsers(formattedUsers)
-      }
-    }
-    loadUsers()
-  }, [fetchUsers])
+  // useEffect(() => {
+  //   const loadUsers = async () => {
+  //     const fetchedUsers = await fetchUsers()
+  //     if (fetchedUsers) {
+  //       const formattedUsers = (fetchedUsers as ApiUser[]).map((u) => ({
+  //         _id: u.id,
+  //         name: u.firstname,
+  //         surname: u.surname,
+  //         email: u.email,
+  //         role: u.role,
+  //       }))
+  //       setUsers(formattedUsers)
+  //     }
+  //   }
+  //   loadUsers()
+  // }, [fetchUsers])
 
   // Adiciona novo usuário
   const onSubmit = async (data: UserFormData) => {
-    try {
-      await signupAdmin(
-        data.firstname,
-        data.surname,
-        data.email,
-        data.password,
-        data.confirmPassword,
-      )
-      alert('Administrador cadastrado com sucesso!')
-      reset()
-      // Atualiza lista após o cadastro
-      const updatedUsers = await fetchUsers()
-      if (updatedUsers) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const formatted = updatedUsers.map((u: any) => ({
-          _id: u.id,
-          name: u.firstname,
-          surname: u.surname,
-          email: u.email,
-          role: u.role,
-        }))
-        setUsers(formatted)
-      }
-    } catch (err) {
-      console.error('Erro ao cadastrar admin:', err)
-      alert('Erro ao cadastrar administrador.')
-    }
+    console.log(data)
+    // try {
+    //   await signupAdmin(
+    //     data.firstname,
+    //     data.surname,
+    //     data.email,
+    //     data.password,
+    //     data.confirmPassword,
+    //   )
+    //   alert('Administrador cadastrado com sucesso!')
+    //   reset()
+    //   // Atualiza lista após o cadastro
+    //   const updatedUsers = await fetchUsers()
+    //   if (updatedUsers) {
+    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //     const formatted = updatedUsers.map((u: any) => ({
+    //       _id: u.id,
+    //       name: u.firstname,
+    //       surname: u.surname,
+    //       email: u.email,
+    //       role: u.role,
+    //     }))
+    //     setUsers(formatted)
+    //   }
+    // } catch (err) {
+    //   console.error('Erro ao cadastrar admin:', err)
+    //   alert('Erro ao cadastrar administrador.')
+    // }
   }
   // Deleta usuário
   const handleDeleteUser = async (userId: number) => {
     if (window.confirm('Tem certeza que deseja deletar este usuário?')) {
       try {
-        await deleteUser(userId)
+        // await deleteUser(userId)
+        console.log(userId)
         alert('Usuário deletado com sucesso!')
       } catch (err) {
         alert('Erro ao deletar usuário.')

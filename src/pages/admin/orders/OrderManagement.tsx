@@ -1,18 +1,16 @@
-import { useEffect } from 'react'
-import { useOrderStore } from '../../../stores/orderStore'
-
 function OrderManagement() {
-  const { orders, fetchOrders, updateOrderStatus } = useOrderStore()
+  // const { orders, fetchOrders, updateOrderStatus } = useOrderStore()
 
-  useEffect(() => {
-    fetchOrders()
-  }, [fetchOrders])
+  // useEffect(() => {
+  //   fetchOrders()
+  // }, [fetchOrders])
 
   // Manipula a mudança de status
-  const handleStatusChange = async (orderId: number, newStatus: string) => {
-    const a = await updateOrderStatus(orderId, newStatus)
-    console.log(a)
-  }
+  // const handleStatusChange = async (orderId: number, newStatus: string) => {
+  //   // const a = await updateOrderStatus(orderId, newStatus)
+  //   console.log(orderId)
+  //   console.log(newStatus)
+  // }
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -29,7 +27,7 @@ function OrderManagement() {
             </tr>
           </thead>
           <tbody>
-            {orders.length > 0 ? (
+            {/* {orders.length > 0 ? (
               orders.map((order) => (
                 <tr
                   key={order.id}
@@ -70,7 +68,8 @@ function OrderManagement() {
                   No Orders found.
                 </td>
               </tr>
-            )}
+            )} */}
+            No Orders found.
           </tbody>
         </table>
       </div>

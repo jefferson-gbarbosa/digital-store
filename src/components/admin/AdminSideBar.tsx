@@ -1,11 +1,10 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { useAuthStore } from '../../stores/authStore'
 
 export const AdminSideBar = () => {
-  const { logout } = useAuthStore()
+  // const { logout } = useAuthStore()
   const navigate = useNavigate()
   async function handleLogout() {
-    await logout()
+    // await logout()
     navigate('/')
   }
   return (

@@ -1,13 +1,21 @@
-import Breadcrumb from '../../../components/admin/Breadcrumb'
-import Gallery from '../../../components/product/Gallery'
-import ProductOptions from '../../../components/product/ProductOptions'
-import Section from '../../../components/layout/Section'
-import BuyBox from '../../../components/product/BuxBox'
-import { ProductListing } from '../../../components/product/ProductListing'
+import Breadcrumb from '../../components/admin/Breadcrumb'
+import Gallery from '../../components/product/Gallery'
+import ProductOptions from '../../components/product/ProductOptions'
+import Section from '../../components/layout/Section'
+import BuyBox from '../../components/product/BuyBox'
+import { ProductListing } from '../../components/product/ProductListing'
+// import { useParams } from 'react-router-dom'
+// import { useState } from 'react'
 
 const ProductViewPage = () => {
+  // usar useProductStore se necessário para buscar dados reais
+  // const [image, setImage] = useState(null)
+  // const { productId } = useParams()
+  // const product1 = products.find((item) => item._id === productId)
+
   // Dados simulados
   const product = {
+    _id: '1',
     name: 'Tênis Esportivo',
     reference: 'COD123',
     stars: 4.5,
@@ -29,6 +37,7 @@ const ProductViewPage = () => {
 
   const recommended = [
     {
+      _id: '1',
       image: '/tenis.png',
       category: 'Tênis',
       name: 'K-Swiss V8 - Masculino',
@@ -36,12 +45,14 @@ const ProductViewPage = () => {
       priceDiscount: 4.49,
     },
     {
+      _id: '2',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
       price: 12.75,
     },
     {
+      _id: '3',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
@@ -49,6 +60,7 @@ const ProductViewPage = () => {
       priceDiscount: 6.0,
     },
     {
+      _id: '4',
       image: '/tenis.png',
       name: 'K-Swiss V8 - Masculino',
       category: 'Tênis',
@@ -96,7 +108,7 @@ const ProductViewPage = () => {
       <Section
         title="Produtos recomendados"
         titleAlign="left"
-        link={{ text: 'Ver todos', href: '/produtos' }}
+        link={{ text: 'Ver todos', href: '/collection' }}
         className="pt-4 pb-15"
       >
         <ProductListing

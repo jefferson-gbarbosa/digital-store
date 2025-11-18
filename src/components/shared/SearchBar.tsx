@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import 'primeicons/primeicons.css'
+import { Search } from 'lucide-react'
 
 interface SearchBarProps {
   placeholder?: string
@@ -24,8 +24,8 @@ const SearchBar = ({
 }: SearchBarProps) => {
   return (
     <div className={clsx('relative w-full', className)}>
-      <i
-        className="pi pi-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 opacity-60 cursor-pointer"
+      <Search
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 opacity-60 cursor-pointer"
         onClick={onSearchClick}
       />
       <input

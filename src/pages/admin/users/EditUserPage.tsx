@@ -2,9 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { InputField, InputRoot } from '../../../components/ui/Input'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useUserStore } from '../../../stores/userStore'
+import { useNavigate } from 'react-router-dom'
 
 const EditUserSchema = z.object({
   firstname: z.string().min(1, 'First name is required'),
@@ -15,63 +13,63 @@ const EditUserSchema = z.object({
 
 type EditUserFormData = z.infer<typeof EditUserSchema>
 function EditUserPage() {
-  const { id } = useParams<{ id: string }>()
+  // const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   // const { fetchUserById, updateUser } = useAuthStore()
-  const { fetchUserById, updateUser } = useUserStore()
+  // const { fetchUserById, updateUser } = useUserStore()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<EditUserFormData>({
     resolver: zodResolver(EditUserSchema),
   })
 
-  useEffect(() => {
-    if (!id) return
-    const loadUser = async () => {
-      try {
-        const user = await fetchUserById(Number(id))
-        if (user) {
-          reset({
-            firstname: user.firstname,
-            surname: user.surname,
-            email: user.email,
-            role: user.role as 'customer' | 'admin',
-          })
-        } else {
-          alert('Usuário não encontrado.')
-          navigate('/admin/users')
-        }
-      } catch (err) {
-        console.error(err)
-        alert('Erro ao carregar usuário.')
-        navigate('/admin/users')
-      }
-    }
-    loadUser()
-  }, [id, fetchUserById, reset, navigate])
+  // useEffect(() => {
+  //   if (!id) return
+  //   const loadUser = async () => {
+  //     try {
+  //       const user = await fetchUserById(Number(id))
+  //       if (user) {
+  //         reset({
+  //           firstname: user.firstname,
+  //           surname: user.surname,
+  //           email: user.email,
+  //           role: user.role as 'customer' | 'admin',
+  //         })
+  //       } else {
+  //         alert('Usuário não encontrado.')
+  //         navigate('/admin/users')
+  //       }
+  //     } catch (err) {
+  //       console.error(err)
+  //       alert('Erro ao carregar usuário.')
+  //       navigate('/admin/users')
+  //     }
+  //   }
+  //   loadUser()
+  // }, [id, fetchUserById, reset, navigate])
 
   const onSubmit = async (data: EditUserFormData) => {
-    if (!id) return
-    try {
-      await updateUser(
-        Number(id),
-        data.firstname,
-        data.surname,
-        data.email,
-        data.role,
-      )
-      alert('Usuário atualizado com sucesso!')
-      navigate('/admin/users')
+    console.log(data)
+    // if (!id) return
+    // try {
+    //   await updateUser(
+    //     Number(id),
+    //     data.firstname,
+    //     data.surname,
+    //     data.email,
+    //     data.role,
+    //   )
+    //   alert('Usuário atualizado com sucesso!')
+    //   navigate('/admin/users')
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error(err)
-      alert(err.message || 'Erro ao atualizar usuário.')
-    }
+    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // } catch (err: any) {
+    //   console.error(err)
+    //   alert(err.message || 'Erro ao atualizar usuário.')
+    // }
   }
   return (
     <div className="max-w-7xl mx-auto p-6">
